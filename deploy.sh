@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 《这本书能让你连接互联网》本地部署脚本
-# 功能：一键安装依赖并启动本地预览服务器
+# 功能：安装锁定版本的依赖并启动本地预览服务器
 
 set -e  # 遇到错误立即退出
 
@@ -69,37 +69,21 @@ check_npm() {
     print_success "npm 版本: $NPM_VERSION"
 }
 
-# 安装 docsify-cli
-install_docsify() {
-    print_info "检查 docsify-cli..."
-    
-    if ! command_exists docsify; then
-        print_warning "未检测到 docsify-cli，正在安装..."
-        npm install -g docsify-cli
-        
-        if [ $? -eq 0 ]; then
-            print_success "docsify-cli 安装成功"
-        else
-            print_error "docsify-cli 安装失败"
-            exit 1
-        fi
-    else
-        DOCSIFY_VERSION=$(docsify --version 2>/dev/null || echo "unknown")
-        print_success "docsify-cli 已安装 (版本: $DOCSIFY_VERSION)"
-    fi
-}
-
-# 切换到 docs 目录
-change_to_docs() {
-    print_info "切换到 docs 目录..."
-    
-    if [ -d "docs" ]; then
-        cd docs
-        print_success "已进入 docs 目录: $(pwd)"
-    else
-        print_error "未找到 docs 目录"
+# 检查 Python 环境（用于零依赖静态服务器）
+check_python() {
+    print_info "检查 Python 环境..."
+    if ! command_exists python3; then
+        print_error "未检测到 Python 3"
         exit 1
     fi
+    print_success "Python 版本: $(python3 --version)"
+}
+
+# 安装项目依赖
+install_dependencies() {
+    print_info "安装项目依赖..."
+    npm ci
+    print_success "项目依赖安装完成"
 }
 
 # 启动 docsify 服务器
@@ -112,7 +96,7 @@ start_server() {
     echo ""
     
     # 启动服务器
-    docsify serve
+    npm run serve
 }
 
 # 主流程
@@ -122,12 +106,10 @@ main() {
     # 检查环境
     check_node
     check_npm
+    check_python
     
     # 安装依赖
-    install_docsify
-    
-    # 切换目录
-    change_to_docs
+    install_dependencies
     
     # 启动服务器
     start_server

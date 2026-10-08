@@ -1,0 +1,13 @@
+{
+  "name": "fq-book",
+  "version": "1.0.0",
+  "private": true,
+  "description": "《这本书能让你连接互联网》Docsify 文档站",
+  "scripts": {
+    "serve": "python3 -m http.server 3000 --directory docs",
+    "test": "node scripts/validate.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,12 +1,14 @@
-# 确保脚本抛出遇到的错误
-set -e
+#!/usr/bin/env bash
 
-# 如果是发布到自定义域名
-# echo 'www.example.com' > CNAME
-# 脚本参考 http://wmm66.com/index/article/detail/id/62.html
+set -euo pipefail
 
-git add .
-git commit -m 'push'
-git push
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "检测到未提交改动。请先检查并提交，再运行此脚本。" >&2
+  exit 1
+fi
 
-exit 0
+branch="$(git branch --show-current)"
+remote="$(git remote get-url origin)"
+
+echo "即将推送 ${branch} 到 ${remote}"
+git push --set-upstream origin "$branch"

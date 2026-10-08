@@ -1,5 +1,7 @@
 # 《这本书能让你连接互联网》
 
+> 本仓库基于 [wu08130612-ai/fq-book](https://github.com/wu08130612-ai/fq-book) 改进，保留完整提交历史与原作者署名。
+
 |[![cc](https://i.creativecommons.org/l/by-nc/4.0/80x15.png)](http://creativecommons.org/licenses/by-nc/4.0/)|[![fq-book](https://img.shields.io/badge/%F0%9F%93%96book-fq--book-red.svg?longCache=true&style=flat-square)](https://hoochanlon.github.io/fq-book)|
 |:-:|:-:|
 
@@ -56,10 +58,10 @@
 
 ### 在线部署
 
-1. fork 《这本书》 到你的 repo
-2. 修改 docs/index.html 将`window.$docsify = {}` 的`repo` 修改成你的 repo
-3. 在 settings 找到 GitHub Pages 并选择 `master brach/docs folder` 
-4. 访问 `https://你的GitHub用户名.github.io/fq-book` 即可看到效果
+1. Fork 本仓库。
+2. 修改 `docs/index.html` 中的 `nameLink` 和 `repo` 为你的账号与仓库。
+3. 在仓库的 **Settings → Pages** 中选择 **Deploy from a branch**，发布分支的 `/docs` 目录。
+4. 等待 Pages 完成发布后，访问 `https://你的GitHub用户名.github.io/fq-book/`。
 
 <details><summary>这里以 anhoodie 为示例 click me! </summary>
 
@@ -78,15 +80,17 @@
 
 ### 本地部署
 
- 
-所需环境：[git](https://git-scm.com/)、[node](https://nodejs.org/zh-cn)；安装很简单一直 `下一步` 直到完成安装即可。
+需要 [Node.js](https://nodejs.org/zh-cn)、Python 3 和 Git。仓库已提供固定的命令，无需全局安装 Docsify，也不要再次执行 `docsify init`（它会覆盖现有配置）。
 
-* 右击选择`git bash`在命令行中输入 `npm i docsify-cli -g`
-* 点击`clone or download`下载`.zip` 并解压缩
-* 进入到`fq-book-master/docs`目录
-* 右击打开`git bash`输入`docsify init .`
-* 使用`docsify serve`完成本地部署
-* 在浏览器中输入`localhost:3000`即可看到效果 :joy: 
+```bash
+npm install
+npm test
+npm run serve
+```
+
+浏览器打开 `http://localhost:3000` 即可预览。也可以直接运行 `./deploy.sh`。
+
+每次提交及 Pull Request 都会自动执行内部链接与站点配置校验。
 
 关于更多详细，请看[docsify官网文档](https://docsify.js.org/)
 
@@ -100,44 +104,24 @@
 
 ### 获取更新
 
-以01user为例，在本地部署时，旧版图链已经失效了，新版已经采用 postimage 支持；此时就需升级成 《这本书Ⅱ》,获取更新其实非常简单，在fork的基础上，执行以下指令
+在自己的 Fork 中添加上游仓库，然后用普通合并或 Pull Request 审查更新：
 
-```
+```bash
 git clone https://github.com/你的github用户名/fq-book.git
 cd fq-book
 git remote add upstream https://github.com/hoochanlon/fq-book.git
-# 若需必要的分支变更，还是使用合适： git fetch --all
 git fetch upstream
-# 对Git有所了解的话，建议还是使用：`git pull upstream master --allow-unrelated-histories` 以审查代码的形式更新
-git reset --hard upstream/master
-
-```
-提交到自己的repo
-
-```
-git add .
-git commit -m "test"
-# 此指令只方便newbie或不得已的强制；会些Git还是推荐：git push -u --force-with-lease origin master
-git push -u -f origin master  
+git merge upstream/master
 ```
 
-输入账号&密码即可上传到自己repo完成Github账户仓库远程更新。**更多作业指令操作说明，请看[Git 官方文档](https://git-scm.com/book/zh/v2)**，在特殊情况，有可能需要涉及到代理、镜像、浅克隆设置
+确认 `npm test` 通过后再推送：
 
-<details><summary>更新图示 click me! </summary>
+```bash
+npm test
+git push origin master
+```
 
-![](https://i.postimg.cc/YSY78GPL/Snipaste-2019-06-12-15-59-16.png)
-
-![](https://i.postimg.cc/pTrZRztp/Snipaste-2019-06-12-16-40-01.png)
-
-部署测试
-
-![](https://i.postimg.cc/dV1tRjrW/Snipaste-2019-06-12-16-42-04.png)
-
-提交到repo
-
-![](https://i.postimg.cc/tRkjrVX8/Snipaste-2019-06-12-16-43-37.png)
-
-</details>
+合并前请先提交或暂存自己的改动，避免覆盖本地工作。不要对含有个人改动的分支使用 `reset --hard` 或强制推送。更多说明见 [Git 官方文档](https://git-scm.com/book/zh/v2)。
 
 ### 代理设置
 
